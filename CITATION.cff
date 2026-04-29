@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "Se utilizar este software em pesquisa, cite-o conforme abaixo."
+title: "AHCF-CPS Web Simulator"
+abstract: >-
+  Ferramenta web open source que operacionaliza o Adaptive Human-Centered
+  Framework for Cobot Programming Selection (AHCF-CPS), apoiando a decisão
+  multicritério sobre métodos de programação de robôs colaborativos em
+  contextos industriais de Human-Robot Collaboration.
+type: software
+authors:
+  - family-names: Matias
+    given-names: João Paulo
+    affiliation: Universidade de São Paulo — Escola Politécnica
+    email: joaopaulomirandamatias@gmail.com
+license: MIT
+repository-code: "https://github.com/joaopaulomirandamatias/web_simulator"
+version: 0.1.0
+date-released: 2026-04-22
+keywords:
+  - cobots
+  - human-robot collaboration
+  - industry 5.0
+  - multi-criteria decision
+  - open source
+references:
+  - type: article
+    authors:
+      - family-names: Matias
+        given-names: João Paulo
+    title: "Adaptive Human-Centered Framework for Cobot Programming Selection"
+    year: 2026
+    institution: Universidade de São Paulo — Escola Politécnica

@@ -1,0 +1,50 @@
+// AHCF-CPS Web Simulator — Prisma schema
+//
+// Para provisionar:
+//   docker compose up -d postgres
+//   cp .env.example .env    # ajuste DATABASE_URL se necessário
+//   pnpm --filter @ahcf-cps/api prisma:generate
+//   pnpm --filter @ahcf-cps/api prisma:migrate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OPERATOR
+  MANAGER
+  ADMIN
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String?
+  role         Role         @default(OPERATOR)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  simulations  Simulation[]
+}
+
+model Simulation {
+  id            String   @id @default(cuid())
+  user          User?    @relation(fields: [userId], references: [id])
+  userId        String?
+  sector        String?
+  context       Json
+  inputs        Json
+  result        Json
+  recommended   String
+  strategy      String
+  engineVersion String
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([recommended])
+  @@index([sector])
+}

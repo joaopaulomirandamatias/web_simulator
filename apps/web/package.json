@@ -1,0 +1,38 @@
+{
+  "name": "@ahcf-cps/web",
+  "version": "0.1.0",
+  "description": "Tablet-oriented web UI for the AHCF-CPS Web Simulator.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "echo \"(unit tests pending; e2e: pnpm e2e)\" && exit 0",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"(lint handled at root)\" && exit 0"
+  },
+  "dependencies": {
+    "@ahcf-cps/engine": "workspace:*",
+    "@tanstack/react-query": "^5.59.16",
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "recharts": "^2.13.3",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

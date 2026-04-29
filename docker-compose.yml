@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ahcf-cps-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ahcf_cps
+      POSTGRES_PASSWORD: ahcf_cps
+      POSTGRES_DB: ahcf_cps
+    ports:
+      - "5432:5432"
+    volumes:
+      - ahcf_cps_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ahcf_cps -d ahcf_cps"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  ahcf_cps_pg:

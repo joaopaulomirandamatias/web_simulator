@@ -1,0 +1,31 @@
+{
+  "name": "ahcf-cps-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AHCF-CPS Web Simulator — Adaptive Human-Centered Framework for Cobot Programming Selection",
+  "license": "MIT",
+  "author": "João Paulo Matias <joaopaulomirandamatias@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaopaulomirandamatias/web_simulator.git"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/**\" --filter \"./apps/**\" build",
+    "dev": "pnpm -r --parallel --filter \"./apps/**\" dev",
+    "dev:api": "pnpm --filter @ahcf-cps/api dev",
+    "dev:web": "pnpm --filter @ahcf-cps/web dev",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  }
+}
