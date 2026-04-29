@@ -3,14 +3,14 @@ import type {
   HistoryEntry,
 } from '../store/simulation.ts';
 import type { SimulationInputs, SimulationResult, StrategyId } from '@ahcf-cps/engine';
-
-const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+import { getApiBase, isApiConfigured } from './apiEnv.ts';
 
 async function request<T>(path: string, body: unknown): Promise<T> {
-  if (!API_URL) {
+  if (!isApiConfigured()) {
     throw new Error('AI_NEEDS_API');
   }
-  const response = await fetch(`${API_URL}${path}`, {
+  const base = getApiBase();
+  const response = await fetch(`${base}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -39,9 +39,10 @@ export interface AiConfigResponse {
 }
 
 export async function fetchAiConfig(): Promise<AiConfigResponse> {
-  if (!API_URL) return { enabled: false };
+  if (!isApiConfigured()) return { enabled: false };
   try {
-    const response = await fetch(`${API_URL}/api/v1/ai/config`);
+    const base = getApiBase();
+    const response = await fetch(`${base}/api/v1/ai/config`);
     if (response.status === 503) return { enabled: false };
     if (!response.ok) return { enabled: false };
     return (await response.json()) as AiConfigResponse;

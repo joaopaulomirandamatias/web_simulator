@@ -1,7 +1,6 @@
 import { runSimulation, type SimulationResult, type StrategyId } from '@ahcf-cps/engine';
 import type { Context, HistoryEntry } from '../store/simulation.ts';
-
-const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+import { getApiBase, isApiConfigured } from './apiEnv.ts';
 
 export interface CalculatePayload {
   inputs: Parameters<typeof runSimulation>[0];
@@ -12,14 +11,15 @@ export interface CalculatePayload {
 
 /**
  * Executa uma simulação.
- * Se `VITE_API_URL` estiver definido, delega ao backend; caso contrário,
- * roda a engine localmente — útil para demos e validação empírica offline.
+ * Se o build tiver `VITE_API_URL` (URL ou vazio para monólito), delega ao backend;
+ * caso contrário, roda a engine localmente — útil para demos offline.
  */
 export async function calculateSimulation(
   payload: CalculatePayload,
 ): Promise<HistoryEntry> {
-  if (API_URL) {
-    const response = await fetch(`${API_URL}/api/v1/simulations`, {
+  if (isApiConfigured()) {
+    const base = getApiBase();
+    const response = await fetch(`${base}/api/v1/simulations`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

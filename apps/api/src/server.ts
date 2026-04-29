@@ -1,5 +1,9 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import cors from '@fastify/cors';
 import sensible from '@fastify/sensible';
+import fastifyStatic from '@fastify/static';
 import Fastify from 'fastify';
 import { readAiConfig, type AiConfig, type chatCompletion } from './ai/openrouter.js';
 import { readAuthConfig, registerAuth, type AuthConfig } from './auth.js';
@@ -77,6 +81,35 @@ export async function buildServer(options: BuildOptions = {}) {
     },
     { prefix: '/api/v1/ai' },
   );
+
+  const webDistRel = process.env.WEB_DIST_PATH;
+  if (webDistRel) {
+    const root = path.resolve(webDistRel);
+    if (fs.existsSync(root)) {
+      await app.register(fastifyStatic, {
+        root,
+        prefix: '/',
+      });
+      app.setNotFoundHandler((request, reply) => {
+        const pathname = request.raw.url?.split('?')[0] ?? '';
+        if (pathname.startsWith('/api')) {
+          return reply.code(404).send({
+            message: `Route ${request.method}:${pathname} not found`,
+            error: 'Not Found',
+            statusCode: 404,
+          });
+        }
+        if (request.method !== 'GET' && request.method !== 'HEAD') {
+          return reply.code(404).send({
+            message: `Route ${request.method}:${pathname} not found`,
+            error: 'Not Found',
+            statusCode: 404,
+          });
+        }
+        return reply.sendFile('index.html');
+      });
+    }
+  }
 
   return app;
 }

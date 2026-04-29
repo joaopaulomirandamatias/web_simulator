@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslations } from '../i18n/useI18n.ts';
 import { useAuthStore, type Role } from '../store/auth.ts';
-
-const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+import { getApiBase, isApiConfigured } from '../lib/apiEnv.ts';
 
 type Mode = 'login' | 'register';
 
@@ -51,8 +50,8 @@ export function Login() {
       setError(t.login.passwordTooShort);
       return;
     }
-    if (!API_URL) {
-      setError('VITE_API_URL not configured; login requires the API.');
+    if (!isApiConfigured()) {
+      setError('API não configurada no build (VITE_API_URL); login exige backend.');
       return;
     }
 
@@ -61,7 +60,8 @@ export function Login() {
       const endpoint = mode === 'login' ? 'login' : 'register';
       const payload =
         mode === 'register' ? { email, password, role } : { email, password };
-      const response = await fetch(`${API_URL}/api/v1/auth/${endpoint}`, {
+      const base = getApiBase();
+      const response = await fetch(`${base}/api/v1/auth/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

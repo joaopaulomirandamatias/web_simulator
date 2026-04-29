@@ -1,6 +1,5 @@
-# Railway — serviço API (schema oficial: https://docs.railway.com/reference/config-as-code).
-# O Railway só aceita [build] / [deploy] por arquivo; não há [[services]] no config-as-code.
-# Variáveis (NODE_ENV, PORT, DATABASE_URL, CORS_ORIGIN, etc.) configurar na aba Variables do serviço.
+# Railway — um serviço: API Fastify + frontend estático (build no apps/api/Dockerfile).
+# Variáveis (DATABASE_URL, STORE_BACKEND, OPENROUTER_*, etc.) na aba Variables.
 
 [build]
 builder = "DOCKERFILE"
