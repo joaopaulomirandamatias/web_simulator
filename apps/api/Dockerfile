@@ -32,6 +32,8 @@ ENV PORT=3333
 WORKDIR /app
 
 COPY --from=build /repo/node_modules ./node_modules
+# pnpm isola deps por pacote — imports como `dotenv` resolvem em apps/api/node_modules.
+COPY --from=build /repo/apps/api/node_modules ./apps/api/node_modules
 COPY --from=build /repo/packages/engine/package.json packages/engine/package.json
 COPY --from=build /repo/packages/engine/dist packages/engine/dist
 COPY --from=build /repo/apps/api/package.json apps/api/package.json
