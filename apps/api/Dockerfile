@@ -18,11 +18,15 @@ RUN pnpm install --frozen-lockfile=false
 FROM deps AS build
 COPY packages/engine ./packages/engine
 COPY apps/api ./apps/api
+# pnpm 10+ não executa scripts de dependências por padrão — sem isso, `prisma generate`
+# não roda e o runtime falha ao importar @prisma/client (STORE_BACKEND=prisma).
+RUN pnpm --filter @ahcf-cps/api exec prisma generate
 RUN pnpm --filter @ahcf-cps/engine build \
  && pnpm --filter @ahcf-cps/api build
 
 # ---- Runtime ----
 FROM node:20-alpine AS runtime
+RUN apk add --no-cache openssl wget
 ENV NODE_ENV=production
 ENV PORT=3333
 WORKDIR /app
