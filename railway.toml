@@ -1,39 +1,13 @@
-# Railway monorepo config (https://docs.railway.com/reference/config-as-code).
-# Defina dois serviços — `api` e `web` — apontando para os Dockerfiles abaixo.
-# Postgres é provisionado como banco gerenciado pelo próprio Railway
-# (variável DATABASE_URL é exposta automaticamente para o serviço API).
+# Railway — serviço API (schema oficial: https://docs.railway.com/reference/config-as-code).
+# O Railway só aceita [build] / [deploy] por arquivo; não há [[services]] no config-as-code.
+# Variáveis (NODE_ENV, PORT, DATABASE_URL, CORS_ORIGIN, etc.) configurar na aba Variables do serviço.
 
 [build]
 builder = "DOCKERFILE"
-
-# ---- API ----
-[[services]]
-name = "api"
 dockerfilePath = "apps/api/Dockerfile"
 
-[services.deploy]
+[deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 5
-
-[services.variables]
-NODE_ENV = "production"
-PORT = "3333"
-HOST = "0.0.0.0"
-STORE_BACKEND = "prisma"
-CORS_ORIGIN = "${{ web.RAILWAY_PUBLIC_DOMAIN }}"
-DATABASE_URL = "${{ Postgres.DATABASE_URL }}"
-
-# ---- Web ----
-[[services]]
-name = "web"
-dockerfilePath = "apps/web/Dockerfile"
-
-[services.deploy]
-healthcheckPath = "/healthz"
-healthcheckTimeout = 15
-restartPolicyType = "ON_FAILURE"
-
-[services.build.args]
-VITE_API_URL = "https://${{ api.RAILWAY_PUBLIC_DOMAIN }}"

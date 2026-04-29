@@ -1,0 +1,12 @@
+# Railway — serviço Web (frontend estático + Nginx).
+# No dashboard do serviço "web": Settings → set "Config as code" / arquivo deste projeto → railway.web.toml
+# Build args: defina VITE_API_URL nas Variables (ex.: https://SEU-API.up.railway.app); o Dockerfile já declara ARG VITE_API_URL.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "apps/web/Dockerfile"
+
+[deploy]
+healthcheckPath = "/healthz"
+healthcheckTimeout = 15
+restartPolicyType = "ON_FAILURE"
